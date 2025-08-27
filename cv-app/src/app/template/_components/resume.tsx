@@ -418,7 +418,7 @@ function Resume({ template }: { template: ITemplate }) {
           ref={contentRef}
           contentEditable
           suppressContentEditableWarning
-          dangerouslySetInnerHTML={{ __html: html }}
+          dangerouslySetInnerHTML={{ __html: html ?? '' }}
         />
       </div>
     </div>
