@@ -353,6 +353,8 @@ function Resume({ template }: { template: ITemplate }) {
       : [],
   })
 
+  
+
 // JSX-renderöinti
   return (
     <div className="flex flex-col gap-6">
@@ -369,22 +371,22 @@ function Resume({ template }: { template: ITemplate }) {
             {/* Osion näkyvyys */}
             <Checkbox
               className="font-semibold text-lg text-blue-700"
-              checked={visibleSections[section]}
+              checked={section in visibleSections ? visibleSections[section as keyof typeof visibleSections] : false}
               onChange={() => toggleSection(section)}
             >
               Näytä {section}
             </Checkbox>
 
             {/* Yksittäiset tietueet */}
-            {visibleSections[section] && (
+            {visibleSections[section as keyof typeof visibleSections] && (
               <div className="ml-4 mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {profileDataForResume[section]?.map((item: any, i: number) => (
+                {(profileDataForResume[section as keyof typeof profileDataForResume] ?? []).map((item: any, i: number) => (
                   <div
                     key={`${section}-${i}`}
                     className="p-3 border rounded shadow-sm bg-white hover:shadow-md transition"
                   >
                     <Checkbox
-                      checked={visibleItems[section]?.[i]}
+                      checked={visibleItems[section]?.[i] ?? false}
                       onChange={() => toggleItem(section, i)}
                     >
                       {item.nimi ||
