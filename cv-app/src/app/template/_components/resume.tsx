@@ -253,7 +253,7 @@ function Resume({ template }: { template: ITemplate }) {
 
     osaaminen: visibleSections.osaaminen
       ? sortOsaaminen(
-          profileDataForResume.osaaminen?.filter((_, i) => visibleItems.osaaminen?.[i])
+          profileDataForResume.osaaminen?.filter((_: any, i: number) => visibleItems.osaaminen?.[i])
         )?.map(o => ({
           tekniikka: o.tekniikka??  '',
           stars: generateStars(o.arviointi),
@@ -262,7 +262,7 @@ function Resume({ template }: { template: ITemplate }) {
 
     kielet: visibleSections.kielet
       ? sortKielet(
-          profileDataForResume.kielet?.filter((_, i) => visibleItems.kielet?.[i])
+          profileDataForResume.kielet?.filter((_: any, i: number) => visibleItems.kielet?.[i])
         )?.map(k => ({
           kieli: k.kieli ?? '',
           stars: generateStars(k.arviointi),
@@ -271,7 +271,7 @@ function Resume({ template }: { template: ITemplate }) {
 
     kurssi: visibleSections.kurssi
       ? sortKurssi(
-          profileDataForResume.kurssi?.filter((_, i) => visibleItems.kurssi?.[i])
+          profileDataForResume.kurssi?.filter((_: any, i: number) => visibleItems.kurssi?.[i])
         )?.map(t => ({
           kurssi: t.kurssi ?? '',
           koulu: t.koulu ?? '',
@@ -282,7 +282,7 @@ function Resume({ template }: { template: ITemplate }) {
 
     työpaikat: visibleSections.työpaikat
       ? sortTyopaikat(
-          profileDataForResume.työpaikat?.filter((_, i) => visibleItems.työpaikat?.[i])
+          profileDataForResume.työpaikat?.filter((_: any, i: number) => visibleItems.työpaikat?.[i])
         )?.map(t => ({
           työnimike: t.työnimike ?? t.työpaikka ?? '',
           organisaatio: t.organisaatio ?? '',
@@ -294,7 +294,7 @@ function Resume({ template }: { template: ITemplate }) {
 
     suosittelija: visibleSections.suosittelija
       ? sortSuosittelijat(
-          profileDataForResume.suosittelija?.filter((_, i) => visibleItems.suosittelija?.[i])
+          profileDataForResume.suosittelija?.filter((_: any, i: number) => visibleItems.suosittelija?.[i])
         )?.map(t => ({
           nimi: t.nimi ?? t.susittelija ?? '',
           tittelijaorganisaatio: t.tittelijaorganisaatio ?? '',
@@ -306,7 +306,7 @@ function Resume({ template }: { template: ITemplate }) {
 
     koulutus: visibleSections.koulutus
       ? sortKoulutus(
-          profileDataForResume.koulutus?.filter((_, i) => visibleItems.koulutus?.[i])
+          profileDataForResume.koulutus?.filter((_: any, i: number) => visibleItems.koulutus?.[i])
         )?.map(t => ({
           pätevyys: t.pätevyys ?? t.tutkinto ?? '',
           koulu: t.koulu ?? '',
@@ -317,7 +317,7 @@ function Resume({ template }: { template: ITemplate }) {
 
     muukoulutus: visibleSections.muukoulutus
       ? sortKoulutus(
-          profileDataForResume.muukoulutus?.filter((_, i) => visibleItems.muukoulutus?.[i])
+          profileDataForResume.muukoulutus?.filter((_: any, i: number) => visibleItems.muukoulutus?.[i])
         )?.map(t => ({
           pätevyys: t.pätevyys ?? t.muututkinto ?? '',
           koulu: t.koulu ?? '',
@@ -328,7 +328,7 @@ function Resume({ template }: { template: ITemplate }) {
 
     projektit: visibleSections.projektit
       ? sortKoulutus(
-          profileDataForResume.projektit?.filter((_, i) => visibleItems.projektit?.[i])
+          profileDataForResume.projektit?.filter((_: any, i: number) => visibleItems.projektit?.[i])
         )?.map(t => ({
           projektinimi: t.projektinimi ?? t.projekti ?? '',
           roolivastuu: t.roolivastuu ?? '',
@@ -340,16 +340,16 @@ function Resume({ template }: { template: ITemplate }) {
 
     harrastukset: visibleSections.harrastukset
       ? sortHarrastukset(
-      profileDataForResume.harrastukset?.filter((_, i) => visibleItems.harrastukset?.[i]) || [])
+      profileDataForResume.harrastukset?.filter((_: any, i: number) => visibleItems.harrastukset?.[i]) || [])
       : [],
 
 
     profiilitekstit: visibleSections.profiilitekstit
-      ? profileDataForResume.profiilitekstit?.filter((_, i) => visibleItems.profiilitekstit?.[i])
+      ? profileDataForResume.profiilitekstit?.filter((_: any, i: number) => visibleItems.profiilitekstit?.[i])
       : [],
     
     ammatti: visibleSections.ammatti
-      ? profileDataForResume.ammatti?.filter((_, i) => visibleItems.ammatti?.[i])
+      ? profileDataForResume.ammatti?.filter((_: any, i: number) => visibleItems.ammatti?.[i])
       : [],
   })
 
