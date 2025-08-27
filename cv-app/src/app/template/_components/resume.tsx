@@ -222,8 +222,12 @@ function Resume({ template }: { template: ITemplate }) {
     }
   }, [currentUserData?.profileDataForResume])
 
+  
   const toggleSection = (section: string) => {
-    setVisibleSections(prev => ({ ...prev, [section]: !prev[section] }))
+    setVisibleSections(prev => ({
+      ...prev,
+      [section]: !prev[section as keyof typeof prev],
+    }))
   }
 
   const toggleItem = (section: string, index: number) => {
