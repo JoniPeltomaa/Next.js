@@ -353,7 +353,11 @@ function Resume({ template }: { template: ITemplate }) {
       : [],
   })
 
-  
+  if (!html) {
+  return <p>Ladataan sisältöä...</p>; // tai virheilmoitus
+}
+
+
 
 // JSX-renderöinti
   return (
