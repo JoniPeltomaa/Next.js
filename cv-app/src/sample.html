@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ansioluettelo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: white;
+      color: #222E46;
+    }
+    .resume-body {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .resume-container {
+      width: 800px;
+    }
+    .intro-content {
+      text-align: center;
+      background-color: #222E46;
+      padding: 20px;
+      color: #BBA17F;
+      text-transform: uppercase;
+    }
+    .name {
+      font-size: 35px;
+    }
+    .profession {
+      font-size: 14px;
+    }
+    .main-content {
+      display: flex;
+      padding: 20px;
+    }
+    .left-column {
+      width: 35%;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    .right-column {
+      width: 65%;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      padding-left: 30px;
+      border-left: 1px solid #BBA17F;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #949494;
+      text-transform: uppercase;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .contact-details p {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .experience-item {
+      margin-bottom: 20px;
+    }
+    .company {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .role, .duration {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .roles-responsibilities {
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    .star {
+      color: red;
+      font-size: 18px;
+    }
+    @media print {
+      .resume-body {
+        padding: 0;
+      }
+      .resume-container {
+        width: 100%;
+      }
+      .avoid-break {
+        page-break-inside: avoid;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .print-block {
+        page-break-inside: avoid;
+      }
+      .intro-content {
+        page-break-after: avoid;
+      }
+    }
+  </style>
+</head>
+<body class="resume-body">
+  <div class="resume-container print-block">
+    <div class="intro-content">
+      <h1 class="name">{{Nimi}}</h1>
+      {{#ammatti}}
+      <h2 class="profession">{{ammatti}}</h2>
+      {{/ammatti}}
+    </div>
+    <div class="main-content">
+      <div class="left-column">
+        <div class="contact-details">
+          <h2 class="section-title">Yhteystiedot</h2>
+          <p>&#9742; {{Puhelin Numero}}</p>
+          <p>&#128231; {{Sähköposti}}</p>
+          <p>&#128187; <a href="{{verkkosivut}}" target="_blank" rel="noopener">{{verkkosivut}}</a></p>
+          <p>&#128187; <a href="{{portfolio}}" target="_blank" rel="noopener">Portfolio</a></p>
+          <p>&#128205; {{Osoite}}</p>
+        </div>
+
+        {{#osaaminen.length}}
+        <div class="skill-details avoid-break">
+          <h2 class="section-title">Osaaminen</h2>
+          <ul>
+            {{#osaaminen}}
+              <li>{{tekniikka}}: <span class="star">{{stars}}</span></li>
+            {{/osaaminen}}
+          </ul>
+        </div>
+        {{/osaaminen.length}}
+
+        {{#kielet.length}}
+        <div class="skill-details avoid-break">
+          <h2 class="section-title">Kielitaito</h2>
+          <ul>
+            {{#kielet}}
+              <li>{{kieli}}: <span class="star">{{stars}}</span></li>
+            {{/kielet}}
+          </ul>
+        </div>
+        {{/kielet.length}}
+
+        {{#harrastukset.length}}
+        <div class="skill-details avoid-break">
+          <h2 class="section-title">Harrastukset</h2>
+          <ul>
+            {{#harrastukset}}
+              <li>{{harrastus}}</li>
+            {{/harrastukset}}
+          </ul>
+        </div>
+        {{/harrastukset.length}}
+      </div>
+
+      <div class="right-column">
+        {{#profiilitekstit.length}}
+        <div class="carres-objective-details avoid-break">
+          <h2 class="section-title">Profiili</h2>
+          {{#profiilitekstit}}
+          <div class="experience-item">
+            <p class="roles-responsibilities">{{text}}</p>
+          </div>
+          {{/profiilitekstit}}
+        </div>
+        {{/profiilitekstit.length}}
+
+        {{#työpaikat.length}}
+        <div class="experience-details avoid-break">
+          <h2 class="section-title">Työpaikat</h2>
+          {{#työpaikat}}
+          <div class="experience-item">
+            <p class="company">{{työnimike}}</p>
+            <p class="role">{{organisaatio}}</p>
+            <p class="duration">{{alkamispäivä}} - {{päättymispäivä}}</p>
+            <p class="roles-responsibilities">{{työtehtäväkuvaus}}</p>
+          </div>
+          {{/työpaikat}}
+        </div>
+        {{/työpaikat.length}}
+
+        {{#projektit.length}}
+        <div class="experience-details avoid-break">
+          <h2 class="section-title">Projektit</h2>
+          {{#projektit}}
+          <div class="experience-item">
+            <p class="company">{{projektinimi}}</p>
+            <p class="role">{{roolivastuu}}</p>
+            <p class="duration">{{alkamisvuosi}} - {{päättymisvuosi}}</p>
+            <p class="roles-responsibilities">{{lyhytkuvaus}}</p>
+          </div>
+          {{/projektit}}
+        </div>
+        {{/projektit.length}}
+
+        {{#koulutus.length}}
+        <div class="education-details avoid-break">
+          <h2 class="section-title">Tutkinto</h2>
+          <ul>
+            {{#koulutus}}
+              <li>{{pätevyys}}: {{alkamisvuosi}} - {{päättymisvuosi}}</li>
+            {{/koulutus}}
+          </ul>
+        </div>
+        {{/koulutus.length}}
+
+        {{#muukoulutus.length}}
+        <div class="education-details avoid-break">
+          <h2 class="section-title">Muu koulutus</h2>
+          <ul>
+            {{#muukoulutus}}
+              <li>{{pätevyys}}: {{alkamisvuosi}} - {{päättymisvuosi}}</li>
+            {{/muukoulutus}}
+          </ul>
+        </div>
+        {{/muukoulutus.length}}
+
+        {{#kurssi.length}}
+        <div class="experience-details avoid-break">
+          <h2 class="section-title">Kurssit</h2>
+          {{#kurssi}}
+          <div class="experience-item">
+            <p class="company">{{kurssi}}</p>
+            <p class="role">{{koulu}}</p>
+            <p class="duration">{{alkamisvuosi}} - {{päättymisvuosi}}</p>
+          </div>
+          {{/kurssi}}
+        </div>
+        {{/kurssi.length}}
+
+        {{#suosittelija.length}}
+        <div class="experience-details avoid-break">
+          <h2 class="section-title">Suosittelijat</h2>
+          {{#suosittelija}}
+          <div class="experience-item">
+            <p class="company">{{nimi}}</p>
+            <p class="role">{{titteli_organisaatio}}</p>
+            <p class="duration">{{työsuhde_sinuun}}</p>
+            <p class="roles-responsibilities">{{sähköposti}}</p>
+            <p class="roles-responsibilities">{{puhelinnumero}}</p>
+          </div>
+          {{/suosittelija}}
+          </div>
+        {{/suosittelija.length}}
+      </div> <!-- right-column -->
+    </div> <!-- main-content -->
+  </div> <!-- resume-container -->
+</body>
+</html>

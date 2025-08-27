@@ -1,0 +1,36 @@
+{
+  "name": "cv-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.19.5",
+    "@supabase/supabase-js": "^2.50.3",
+    "@uiw/react-codemirror": "^4.23.12",
+    "antd": "^5.25.3",
+    "dayjs": "^1.11.13",
+    "firebase": "^11.8.0",
+    "lucide-react": "^0.511.0",
+    "mongoose": "^8.15.0",
+    "mustache": "^4.2.0",
+    "next": "15.3.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-to-print": "^3.1.0",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/mustache": "^4.2.6",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

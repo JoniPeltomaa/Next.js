@@ -1,0 +1,61 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+@theme {
+  --color-primary: oklch(31.86% 0.147 281.57);
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  font-family: "Montserrat", sans-serif !important;
+  height: 500;
+  margin: 0;
+  padding: 0;
+}
+
+.cl-cardBox {
+  border-radius: 2px !important;
+}
+
+.cl-formFieldInput{
+  height: 45px !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
+  border: 1px solid #2C1D79 !important;
+}
+
+.cl-formButtonPrimary {
+  height: 42px !important;
+  box-shadow: none !important;
+  background-color: #2C1D79 !important;
+  border-radius: 2px !important;
+}
+
+.ant-form-item {
+  margin-bottom: 0 !important;
+}
+
+.ant-form-item-label {
+  padding: 0 !important;
+}
+
+table {
+  border: 1px solid #727272 !important;
+  margin-top: 20px;
+}
+
+ul {
+  list-style-type: disc !important;
+}
+
+li {
+  margin-left: 15px !important;
+}
