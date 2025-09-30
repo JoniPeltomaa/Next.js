@@ -29,7 +29,6 @@ import Image from 'next/image'
 const Header = () => {
   return (
     <div>
-      <Image width={100} height={100} src={} alt="" className="" />
       <header className="flex flex-row justify-between items-center bg-indigo-800 my-5 mx-5 lg:mx-33 px-2 py-4 rounded-full">
         <Link href="/">
           <h1 className="text-2xl lg:text-3xl font-bold ms-3">Jonin Blogi</h1>
