@@ -94,7 +94,7 @@ export default function page() {
                                     <textarea className='border-3 border-[#e1d1ff7a] p-2 rounded-lg w-full' type="text" placeholder="Kommentit" />
                                 </div>
                                 <div>
-                                    <button className="hidden lg:flex bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3">Lähetä Kommentit <i className="fas fa-paper-plane ms-1"></i></button>
+                                    <button className="lg:flex bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3">Lähetä Kommentit <i className="fas fa-paper-plane ms-1"></i></button>
                                 </div>
                             </div>
                         </div>
