@@ -43,7 +43,7 @@ export const AuthProvider = ({children}) => {
         checkUser()
 
         const {data: autListener} = supabase.auth.onAuthStateChange((event, session) => {
-            if (session.user) {
+            if (session && session?.user) {
                 setUser(session.user)
                 loadUserProfile(session.user.id)
             } else {
