@@ -145,7 +145,7 @@ const Header = () => {
               </div>
             </DialogContent>
           </Dialog>
-          <Link href="/auth/login" className="hidden lg:flex bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3">Kirjaudu Sisään <i className="fas fa-sign-in-alt ms-1"></i></Link>
+          <Link href="/auth/login" className="hidden lg:flex items-center bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3">Kirjaudu Sisään <i className="fas fa-sign-in-alt ms-1"></i></Link>
           <Sheet >
             <SheetTrigger className="lg:hidden">
               <i className="fas fa-bars text-2xl me-3"></i>

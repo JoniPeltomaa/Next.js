@@ -1,5 +1,6 @@
 import { Sora } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
         <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
       </head>
       <body className={`${sora?.className} antialiased bg-gradient-to-b from-[#050611] to-[#04000c] text-white relative`}>
+        <Toaster richColors position="top-right" />
         {children}
       </body>
     </html>
