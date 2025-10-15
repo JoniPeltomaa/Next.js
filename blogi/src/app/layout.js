@@ -1,6 +1,7 @@
 import { Sora } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { AuthProvider } from "@/context/AuthContext";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -23,7 +24,9 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${sora?.className} antialiased bg-gradient-to-b from-[#050611] to-[#04000c] text-white relative`}>
         <Toaster richColors position="top-right" />
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

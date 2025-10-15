@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import Link from 'next/link'
 import {
@@ -25,8 +26,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import Image from 'next/image'
+import { useAuth } from '@/context/AuthContext'
 
 const Header = () => {
+   const { user } = useAuth()
   return (
     <div>
       <header className="flex flex-row justify-between items-center bg-indigo-800 my-5 mx-5 lg:mx-33 px-2 py-4 rounded-full">
@@ -145,7 +148,12 @@ const Header = () => {
               </div>
             </DialogContent>
           </Dialog>
-          <Link href="/auth/login" className="hidden lg:flex items-center bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3">Kirjaudu Sisään <i className="fas fa-sign-in-alt ms-1"></i></Link>
+          {user ? (
+            <button className="hidden lg:flex items-center bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3"><i className="fas fa-sign-out-alt me-1"></i> Kirjaudu Ulos </button>
+          ) : (
+            <Link href="/auth/login" className="hidden lg:flex items-center bg-gradient-to-r from-indigo-500 to-pink-500 cursor-pointer text-[15px] font-bold px-6 py-3 rounded-full border-0 me-3">Kirjaudu Sisään <i className="fas fa-sign-in-alt ms-1"></i></Link>
+          )}
+          
           <Sheet >
             <SheetTrigger className="lg:hidden">
               <i className="fas fa-bars text-2xl me-3"></i>
