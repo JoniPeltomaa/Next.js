@@ -1,85 +1,105 @@
-import React from 'react'
+"use client"
+
+import { useState, useEffect } from 'react'
 import { Header, Footer, Category } from '../components'
 import Image from 'next/image'
 import { defaultArticle, defaultAvatar } from '../components/images'
 import { formatDate } from '@/lib/utils';
+import { supabase } from '@/lib/supabaseClient';
+import { toast } from 'sonner';
+import { useParams, useRouter } from 'next/navigation';
 
 
 export default function page() {
-        const article = {
-            title: "How to Write Engaging Blog Content",
-            content: "In this guide, we break down actionable strategies for writing blog posts that capture attention...",
-            thumbnail: defaultArticle,
-            slug: "how-to-write-engaging-blog-content",
-            views: 120,
-            read_time: 5,
-            category: { title: "Writing Tips", thumbnail: defaultArticle, slug: "writing-tips" },
-            author: { full_name: "Jennifer Adga", image: defaultAvatar, job_title: "Writer at Desphixs" },
-        };
 
-        const comments = [
-            {
-                profile: {
-                    full_name: "Nora Michaels",
-                    image: defaultAvatar,
-                },
-                article_id: 1,
-                comment: "Really insightful post! The tips on writing engaging content are spot on.",
-                date_created: "2025-03-22T10:30:00Z",
-            },
-            {
-                profile: {
-                    full_name: "James Ortega",
-                    image: defaultAvatar,
-                },
-                article_id: 1,
-                comment: "Thanks for breaking it down clearly. I especially liked the section on SEO basics.",
-                date_created: "2025-03-22T12:15:00Z",
-            },
-            {
-                profile: {
-                    full_name: "Lydia Tran",
-                    image: defaultAvatar,
-                },
-                article_id: 1,
-                comment: "Great read! Looking forward to trying some of these techniques in my own writing.",
-                date_created: "2025-03-22T13:45:00Z",
-            },
-        ];
+    const router = useRouter()
+    const params = useParams()
+    const slug = params.slug
+
+    const [article, setArticle] = useState([])
+    const [comments, setComments] = useState([])
+    const [likes, setLikes] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    const fetchArticleData = async () => {
+        setLoading(false)
+
+        const {data: articleData, error: articleError} = await supabase
+            .from("article")
+            .select(
+                `
+                    id, title, content, thumbnail, date_created, views, read_time, slug,
+                    category: category_id(title),
+                    author: profile_id(id, full_name, image, job_title),
+                    comment(id, comment, date_created, profile: profile_id(full_name, image)),
+                    like(id, profile_id, date_created)
+                `
+            )
+            .eq("slug", slug)
+            .single()
+        
+        if (articleError) {
+            toast.error("Blogi viestien hakeminen epäonnistuis")
+            console.log("Blogi viestien hakeminen epäonnistuis: ", articleError)
+            return
+        }
+
+        setArticle((prevArticle) => ({
+            ...prevArticle,
+            views: (prevArticle?.views || 0) + 1,
+        }))
+
+        const {error: updateError} = await supabase.from("article").update({views: articleData?.views + 1}).eq("id",articleData?.id)
+
+        if (updateError) {
+            console.log("Failed to update views: ", updateError)
+        }
+
+        setArticle(articleData)
+        setComments(articleData?.comment)
+        setLikes(articleData?.like)
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetchArticleData()
+    }, [])
 
   return (
     <div>
         <Header />
         <section className="lg:px-33 px-5 my-20 z-10 relative">
-            <div className="relative w-full h-[30rem]">
-                <Image width={100} height={100} src={defaultArticle} alt="" className=" w-full h-[30rem] object-cover absolute rounded-2xl" />
+            <div className="relative w-full h-[30rem]"onClick={fetchArticleData}>
+                <Image width={100} height={100} src={article?.thumbnail || defaultArticle} alt="" className=" w-full h-[30rem] object-cover absolute rounded-2xl" />
                 <div className="w-full h-[30rem] absolute bg-[#000000c3] rounded-2xl" />
-                <h1 className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center text-5xl font-semibold leading-[4rem] drop-shadow-lg">Blogi Otsikko</h1>
+                <h1 className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center text-5xl font-semibold leading-[4rem] drop-shadow-lg">{article?.title}</h1>
             </div>
+
             <div className="flex items-center gap-3 mt-10">
-                <button className="p-2 px-4 bg-indigo-800 rounded-lg"><i className="fas fa-thumbs-up"></i></button>
+                <button className="p-2 px-4 bg-indigo-800 rounded-lg"><i className="fas fa-thumbs-up"></i>{likes?.length || 0}</button>
+                
                 <button className="p-2 px-4 bg-indigo-800 rounded-lg"><i className="fas fa-bookmark"></i></button>
+                
                 <div className="p-2 px-4 bg-indigo-800 rounded-lg">
-                    <i className="fas fa-eye me-1"></i>0 Nähnyt
+                    <i className="fas fa-eye me-1"></i>{article?.views} Nähnyt
                 </div>
+                
                 <div className="p-2 px-4 bg-indigo-800 rounded-lg">
-                    <i className="fas fa-clock me-1"></i>2 min luettu
+                    <i className="fas fa-clock me-1"></i>{article?.read_time} min luettu
                 </div>
             </div>
+            
             <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-10 my-10">
                 <div >
                     <div className="bg-[#07050dd3] p-4 rounded-3xl backdrop-blur-sm ">
-                        <p className="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim ratione delectus repellat sapiente reprehenderit eligendi accusamus soluta odio deleniti atque? In rerum, hic pariatur mollitia natus tempora ducimus rem sed corrupti, quo enim obcaecati eveniet dicta officiis odio fugiat unde perspiciatis ratione tempore labore iste sint? Distinctio, blanditiis, accusantium ipsa consequatur sunt et ipsam, facilis eaque aperiam dolorem mollitia? Quas tenetur id eligendi iusto fuga harum illo, eius, dolorum sit obcaecati dolore deserunt animi a atque, impedit natus dicta? Quaerat quod dolores molestias sint debitis, dicta nemo tempora vero ea rerum quasi, aliquid animi sit laudantium iusto praesentium nisi atque!</p>
-                        <p className="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim ratione delectus repellat sapiente reprehenderit eligendi accusamus soluta odio deleniti atque? In rerum, hic pariatur mollitia natus tempora ducimus rem sed corrupti, quo enim obcaecati eveniet dicta officiis odio fugiat unde perspiciatis ratione tempore labore iste sint? Distinctio, blanditiis, accusantium ipsa consequatur sunt et ipsam, facilis eaque aperiam dolorem mollitia? Quas tenetur id eligendi iusto fuga harum illo, eius, dolorum sit obcaecati dolore deserunt animi a atque, impedit natus dicta? Quaerat quod dolores molestias sint debitis, dicta nemo tempora vero ea rerum quasi, aliquid animi sit laudantium iusto praesentium nisi atque!</p>
-                        <p className="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim ratione delectus repellat sapiente reprehenderit eligendi accusamus soluta odio deleniti atque? In rerum, hic pariatur mollitia natus tempora ducimus rem sed corrupti, quo enim obcaecati eveniet dicta officiis odio fugiat unde perspiciatis ratione tempore labore iste sint? Distinctio, blanditiis, accusantium ipsa consequatur sunt et ipsam, facilis eaque aperiam dolorem mollitia? Quas tenetur id eligendi iusto fuga harum illo, eius, dolorum sit obcaecati dolore deserunt animi a atque, impedit natus dicta? Quaerat quod dolores molestias sint debitis, dicta nemo tempora vero ea rerum quasi, aliquid animi sit laudantium iusto praesentium nisi atque!</p>
-                        <p className="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim ratione delectus repellat sapiente reprehenderit eligendi accusamus soluta odio deleniti atque? In rerum, hic pariatur mollitia natus tempora ducimus rem sed corrupti, quo enim obcaecati eveniet dicta officiis odio fugiat unde perspiciatis ratione tempore labore iste sint? Distinctio, blanditiis, accusantium ipsa consequatur sunt et ipsam, facilis eaque aperiam dolorem mollitia? Quas tenetur id eligendi iusto fuga harum illo, eius, dolorum sit obcaecati dolore deserunt animi a atque, impedit natus dicta? Quaerat quod dolores molestias sint debitis, dicta nemo tempora vero ea rerum quasi, aliquid animi sit laudantium iusto praesentium nisi atque!</p>
-                    </div>
+                        <p className="mb-2">{article?.content}</p>
+                    </div>    
                     <div className="space-y-33 mt-10">
                         <div className="flex items-center gap-3 bg-indigo-800 rounded-xl p-3 relative">
-                            <Image width={100} height={100} src={defaultAvatar} alt="" className="w-[5rem] h-[5rem] rounded-full" />
+                            <Image width={100} height={100} src={article?.author?.image || defaultAvatar} alt="" className="w-[5rem] h-[5rem] rounded-full" />
                             <div>
-                                <h1 className="text-3xl font-bold">Otsikko</h1>
-                                <p>Kirjoittanut Testaaja</p>
+                                <h1 className="text-3xl font-bold">{article?.author?.full_name}</h1>
+                                <p>{article?.author?.job_title || "Kirjoittanut Testaaja"}</p>
                             </div>
                         </div>
                         <div>
