@@ -101,7 +101,7 @@ const Header = () => {
         <div className="flex gap-4 items-center">
           {/* Kirjanmerkki alue */}
           <Dialog>
-            <DialogTrigger>
+            <DialogTrigger asChild={true}>
               <button>
                 <i className="ri-heart-line text-2xl"></i>
               </button>
@@ -138,7 +138,7 @@ const Header = () => {
           </Dialog>
           {/* Etsi Alue */}
           <Dialog>
-            <DialogTrigger>
+            <DialogTrigger asChild={true}>
               <button>
                 <i className="ri-search-line text-2xl"></i>
               </button>
@@ -189,7 +189,7 @@ const Header = () => {
           )}
           
           <Sheet >
-            <SheetTrigger className="lg:hidden">
+            <SheetTrigger className="lg:hidden" asChild={true}>
               <i className="fas fa-bars text-2xl me-3"></i>
             </SheetTrigger>
             <SheetContent className={`bg-[#07050D] border border-[#110c1f] text-white`}>
