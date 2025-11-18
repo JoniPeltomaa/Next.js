@@ -27,6 +27,8 @@ export default function page() {
     const [newComment, setNewComment] = useState("")
     const [submitting, setSubmitting] = useState(false)
 
+    const [liking, setLiking] = useState(false)
+
     const fetchArticleData = async () => {
         setLoading(false)
 
@@ -104,6 +106,67 @@ export default function page() {
         setSubmitting(false)
     }
 
+    const handleLikeArticle = async () => {
+        if (!user) {
+            toast.error("Kirjaudu sisään tykätäksesi artikkelista")
+            return
+        }
+
+        if (liking) return
+        setLiking(true)
+
+        const existingLike = likes.find((like) => like.profile_id === profile?.id)
+        let updatedLikes
+
+        if (existingLike) {
+            updatedLikes = likes.filter((like) => like.profile_id !== profile?.id)
+            setLikes(updatedLikes)
+
+            const {error: unlikeError} = await supabase.from("like").delete().eq("id", existingLike?.id)
+
+            if (unlikeError) {
+                setLikes([...likes, existingLike])
+                toast.error("epäonnistui poistamaan artikkelin tykkäyksen")
+                console.error("unlike error: ", unlikeError)
+            } else {
+                toast.success("et enää tykännyt tästä artikkelista")
+            }
+        } else {
+            const newLike = {
+                id: Date.now(),
+                profile_id: profile?.id,
+                date_created: new Date().toISOString(),
+            }
+
+            updatedLikes = [...likes, newLike]
+            setLikes(updatedLikes)
+
+            const {data, error: likeError} = await supabase
+                .from("like")
+                .insert([
+                    {
+                        article_id: article?.id,
+                        profile_id: profile?.id,
+                        date_created: new Date(),
+                    }
+                ])
+                .select("id")
+                .single()
+            
+            if (likeError) {
+                setLikes(likes.filter((like) => like.id !== newLike.id))
+                toast.error("epäonnistui tykkäämästä artikkelista")
+                console.error("Like error: ", likeError)
+            } else {
+                setLikes(updatedLikes?.map((like) => (like.id === newLike?.id ? { ...like, id: data.id} : like)))
+                toast.success("Sinä tykkäsit tästä artikkelista")
+            }
+        }
+
+        setLiking(false)
+    }
+
+
     useEffect(() => {
         fetchArticleData()
     }, [])
@@ -119,7 +182,7 @@ export default function page() {
             </div>
 
             <div className="flex items-center gap-3 mt-10">
-                <button className="p-2 px-4 bg-indigo-800 rounded-lg"><i className="fas fa-thumbs-up"></i>{likes?.length || 0}</button>
+                <button onClick={handleLikeArticle} className="p-2 px-4 bg-indigo-800 rounded-lg"><i className="fas fa-thumbs-up"></i>{likes?.length || 0}</button>
                 
                 <button className="p-2 px-4 bg-indigo-800 rounded-lg"><i className="fas fa-bookmark"></i></button>
                 
