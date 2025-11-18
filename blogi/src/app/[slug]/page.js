@@ -22,12 +22,14 @@ export default function page() {
     const [article, setArticle] = useState([])
     const [comments, setComments] = useState([])
     const [likes, setLikes] = useState([])
+    const [bookmarked, setBookmarked] = useState(false)
     const [loading, setLoading] = useState(true)
 
     const [newComment, setNewComment] = useState("")
     const [submitting, setSubmitting] = useState(false)
 
     const [liking, setLiking] = useState(false)
+    const [bookmarking, setBookmarking] = useState(false)
 
     const fetchArticleData = async () => {
         setLoading(false)
@@ -66,6 +68,22 @@ export default function page() {
         setArticle(articleData)
         setComments(articleData?.comment)
         setLikes(articleData?.like)
+
+        if (user) {
+            const {data, bookmarkData, error: bookmarkError} = await supabase
+            .from("bookmark")
+            .select("id")
+            .eq("profile_id", profile?.id)
+            .eq("article_id", article?.id)
+            .maybeSingle()
+
+            if (bookmarkError) {
+                console.error("Bookmark fecth error: ", bookmarkError)
+            }
+
+            setBookmarked(!!bookmarkData)
+        }
+
         setLoading(false)
     }
 
@@ -166,6 +184,60 @@ export default function page() {
         setLiking(false)
     }
 
+    const handleBookmark = async () => {
+        if (!user) {
+            toast.error("kirjaudu sisään tallentaaksesi tämä artikkeli kirjanmerkeihin")
+            return
+        }
+
+        if (bookmarking) return
+
+        setBookmarking(true)
+
+        const {data: existingBookmark, error: fetchError} = await supabase
+            .from("bookmark")
+            .select("id")
+            .eq("profile_id", profile?.id)
+            .eq("article_id", article?.id)
+            .single()
+
+        if (fetchError && fetchError.code !== "PGRST116") {
+            toast.error("virhe tarkistettaessa kirjanmerkkiä")
+            console.error("Bookmark fetch error: ", fetchError)
+            setBookmarking(false)
+            return
+        }
+
+        if (existingBookmark) {
+            const {error: removeError} = await supabase.from("bookmark").delete().eq("id", existingBookmark?.id)
+
+            if (removeError) {
+                toast.error("ei onnistunut poistamaan kirjanmerkkiä")
+                console.error("Bookmark remove error: ", removeError)
+            } else {
+                setBookmarked(false)
+                toast.success("Kirjainmerkki poistettu")
+            }
+        } else {
+            const { error: insertError} = await supabase.from("bookmark").insert([
+                {
+                    profile_id: profile?.id,
+                    article_id: article?.id,
+                    date_created: new Date(),
+                }
+            ])
+            if (insertError) {
+                toast.error("ei onnistunut lisäämään artikkelia kirjanmerkkeihin")
+                console.error("Bookmark error: ", insertError)
+            } else {
+                setBookmarked(true)
+                toast.success("artikkeli merkitty kirjanmerkkeihin!")
+            }
+        }
+
+        setBookmarking(false)
+    }
+
 
     useEffect(() => {
         fetchArticleData()
@@ -184,7 +256,11 @@ export default function page() {
             <div className="flex items-center gap-3 mt-10">
                 <button onClick={handleLikeArticle} className="p-2 px-4 bg-indigo-800 rounded-lg"><i className="fas fa-thumbs-up"></i>{likes?.length || 0}</button>
                 
-                <button className="p-2 px-4 bg-indigo-800 rounded-lg"><i className="fas fa-bookmark"></i></button>
+                <button onClick={handleBookmark} className="p-2 px-4 bg-indigo-800 rounded-lg">
+                    {bookmarking ? (<i className="fas fa-bookmark"></i>) : (<>
+                        {bookmarked ? (<i className="fas fa-bookmark text-red-500"></i>) : (<i className="fas fa-bookmark"></i>)}
+                    </>)}
+                </button>
                 
                 <div className="p-2 px-4 bg-indigo-800 rounded-lg">
                     <i className="fas fa-eye me-1"></i>{article?.views} Nähnyt
