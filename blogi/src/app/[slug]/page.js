@@ -178,6 +178,18 @@ export default function page() {
             } else {
                 setLikes(updatedLikes?.map((like) => (like.id === newLike?.id ? { ...like, id: data.id} : like)))
                 toast.success("Sinä tykkäsit tästä artikkelista")
+
+                // Create a new notification object
+                await supabase.from("notification").insert([
+                    {
+                        sender_id: profile?.id,
+                        receiver_id: article?.author?.id,
+                        type: "like",
+                        message: `${profile?.full_name} tykkäsi sinun  artikkelista ${article?.title}`,
+                        date_created: new Date(),
+                        article_id: article?.id,
+                    }
+                ])
             }
         }
 
