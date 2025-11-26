@@ -69,39 +69,19 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {articles?.slice(0, 4)?.map((article, index) => (
-            <div>
-              <Link href="/">
-                <div className="relative h-[300px] w-full border-1 border-[#524c647] rounded-xl">
-                  <Image width={100} height={100} src={article.thumbnail} alt="" className="w-full h-full object-cover rounded-xl"/>
-                  <div className="absolute bottom-0 left-0 w-full h-[10rem] bg-gradient-to-t from-[#0b0a20] to-transparent rounded-b-xl"></div>
-                  <div className="absolute bottom-0 p-3 space-y-3 rounded-b-xl">
-                    <div className="inline-flex items-center gap-2 bg-indigo-500 p-1 w-auto text-xs me-2 rounded-full">
-                      <i className="fas fa-umbrella"></i>
-                      <p>{article?.category?.title}</p>
-                    </div>
-                    <h1 className="text-2xl font-bold drop-shadow-lg">{article?.title}</h1>
-                    <div className="flex items-center gap-4 font-light">
-                      <p>Tekijä {article?.author?.full_name}</p>
-                      <p>{article?.read_time} Min Luettu</p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
-            ))}
-          </div>
+          
         </section>
-        
+        <section className="p-5">
+          <Category />
+        </section>
         <section className="lg:px-33 px-5 lg:my-30 my-10">
           <div>
-            <h1 className="lx:text-7xl text-4xl font-bold" onClick={fetchArticles}>Luetuimmat postaukset 🔥</h1>
+            <h1 className="lx:text-7xl text-4xl font-bold" onClick={fetchArticles}>Luetuimmat Viestit 🔥</h1>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-7 mt-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-7 h-fit">
               {articles?.slice(0, 4)?.map((article, index) => (
-                <div className="border-2 border-[#2016736e] bg-[#0d0837] rounded-xl p-2 shadow-lg h-auto">
+                <div key={article.id} className="border-2 border-[#2016736e] bg-[#0d0837] rounded-xl p-2 shadow-lg h-auto">
                 <Image width={100} height={100} src={article.thumbnail} alt="Esimerkki blogi postauksen Otsikko" className="w-full h-[20rem] object-cover rounded-xl" />
                 {/* Post card body */}
                 <div className="space-y-3 pt-5">
@@ -127,7 +107,7 @@ export default function Home() {
                     <Image width={100} height={100} src={article?.author?.image || defaultAvatar} alt="Esimerkki postauksen kirjoittajan kuva" className="w-8 h-8 object-cover rounded-full" />
                     <div>
                       <h1 className="text-sm text-white font-bold mb-0">{article?.author?.full_name}</h1>
-                      <p className="text-xs font-light text-gray-100 italic mt-0">{article?.author?.job_title || "Writer at Testaaja"}</p>
+                      <p className="text-xs font-light text-gray-100 italic mt-0">{article?.author?.job_title }</p>
                     </div>
                   </div>
                   <Link href={`/${article?.slug}`} className="bg-indigo-400 text-[12px] font-bold px-4 py-2 rounded-xl border border-[#a4adff]">
@@ -138,14 +118,14 @@ export default function Home() {
               ))}
             </div>
             <div>
-              <Category />
+              
               <div>
                 <div className="my-10">
-                  <h1 className="text-2xl font-bold">Uusin Blogi Postaus 📰</h1>
-                  <p className="italic font-normal text-xs mt-2 text-gray-500">Viimeisimmät uudet postaukset jotka olet päivittänyt.</p>
+                  <h1 className="text-2xl font-bold">Uusin Blogi Viesti 📰</h1>
+                  <p className="italic font-normal text-xs mt-2 text-gray-500">Viimeisimmät uudet Viestit jotka olet päivittänyt.</p>
                 </div>
                 {articles?.slice(0, 2).map((article, index) => (
-                  <div className="mb-4 flex gap-2 border border-[#9498ff34] p-2 rounded-xl">
+                  <div key={article.id} className="mb-4 flex gap-2 border border-[#9498ff34] p-2 rounded-xl">
                     <Image width={100} height={100} src={article?.thumbnail} alt="" className="h-20 w-20 object-cover rounded-md" />
                     <div className="flex flex-col justify-between">
                       <h1 className="text-bold">{article?.title}</h1>
@@ -158,59 +138,6 @@ export default function Home() {
                 ))}
               </div>
             </div>
-          </div>
-        </section>
-
-        <section className="lg:px-33 px-5 lg:my-30 my-10">
-          <div className="mb-10">
-            <h1 className="lx:text-7xl text-4xl font-bold">Käsin poimittu ✌️</h1>
-          </div>
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-7">
-              {articles?.slice(0, 4)?.map((article, index) => (
-                <div>
-                  <Link href="/">
-                    <div className="relative h-[300px] w-full border-1 border-[#524c647] rounded-xl">
-                      <Image width={100} height={100} src={article.thumbnail} alt="" className="w-full h-full object-cover rounded-xl"/>
-                      <div className="absolute bottom-0 left-0 w-full h-[10rem] bg-gradient-to-t from-[#0b0a20] to-transparent rounded-b-xl"></div>
-                      <div className="absolute bottom-0 p-3 space-y-3 rounded-b-xl">
-                        <div className="inline-flex items-center gap-2 bg-indigo-500 p-1 w-auto text-xs me-2 rounded-full">
-                          <i className="fas fa-umbrella"></i>
-                          <p>{article?.category?.title}</p>
-                        </div>
-                        <h1 className="text-2xl font-bold drop-shadow-lg">{article?.title}</h1>
-                        <div className="flex items-center gap-4 font-light">
-                          <p>Tekijä {article?.author?.full_name}</p>
-                          <p>{article?.read_time} Min Luettu</p>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              ))}
-            </div>
-        </section>
-        <section className="lg:px-33 px-5 lg:my-30 my-10">
-          <div className="mb-10">
-            <h1 className="lx:text-7xl text-4xl font-bold">Tärkeimät Postaukset 🌐</h1>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-7">
-            {articles?.slice(0, 4)?.map((article, index) => (
-            <div className="relative h-[30rem]">
-              <Image width={100} height={100} src={defaultArticle} alt="Image Title" className="w-full h-full object-cover rounded-xl absolute" />
-              <div className="absolute bg-[#0b021bdb] w-full bottom-0 backdrop-blur-md rounded-xl p-3 space-y-3">
-                <div className="inline-flex items-center gap-2 bg-indigo-500 p-1 w-auto text-xs me-2 rounded-full">
-                  <i className="fas fa-umbrella"></i>
-                  <p>Lifestyle</p>
-                </div>
-                <h1 className="text-2xl font-bold drop-shadow-lg">Esimerkki Blogi Viestin Otsiko</h1>
-                <div className="flex items-center gap-4 font-semibold text-xs">
-                  <Image width={100} height={100} src={defaultAvatar} alt="Image Avatar" className="w-8 h-8 object-cover rounded-full" />
-                  <p>5 päivä syyskuuta, 2025</p>
-                  <p>3 Min Luettu</p>
-                </div>
-              </div>
-            </div>
-          ))}
           </div>
         </section>
         <Footer />

@@ -11,7 +11,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext'
 
 
-export default function page() {
+export default function Page() {
 
     const router = useRouter()
     const params = useParams()
@@ -293,7 +293,6 @@ export default function page() {
                             <Image width={100} height={100} src={article?.author?.image || defaultAvatar} alt="" className="w-[5rem] h-[5rem] rounded-full" />
                             <div>
                                 <h1 className="text-3xl font-bold">{article?.author?.full_name}</h1>
-                                <p>{article?.author?.job_title || "Kirjoittanut Testaaja"}</p>
                             </div>
                         </div>
                         <div>
@@ -301,7 +300,7 @@ export default function page() {
                             <div className='space-y-5 relative'>
                                 <div className='flex flex-col items-start gap-2'>
                                     <label htmlFor="">Koko Nimi</label>
-                                    <input className='border-3 border-[#e1d1ff7a] p-2 rounded-lg w-full' type="text" value={profile?.full_name || "Testaaja"} readOnly placeholder="Sinun nimesi" />
+                                    <input className='border-3 border-[#e1d1ff7a] p-2 rounded-lg w-full' type="text" value={profile?.full_name} readOnly placeholder="Sinun nimesi" />
                                 </div>
                                 <div className='flex flex-col items-start gap-2'>
                                     <label htmlFor="">Kommentit</label>

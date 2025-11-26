@@ -1,36 +1,61 @@
 "use client"
-import Image from 'next/image';
-import React, { useState } from 'react'
+import Image from 'next/image'
+import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { defaultArticle } from '../components/images'
+import { supabase } from '@/lib/supabaseClient'
 
 const Category = () => {
-  const [categories, setCategories] = useState([
-        { id: 1, title: "Technology", thumbnail: "/assets/images/blog/pexels-photo-1089440.webp", slug: "technology" },
-        { id: 2, title: "Health", thumbnail: "/assets/images/blog/pexels-photo-302083.jpg", slug: "health" },
-        { id: 3, title: "Lifestyle", thumbnail: "/assets/images/blog/pexels-photo-247597.jpg", slug: "lifestyle" },
-        { id: 4, title: "Travel", thumbnail: "/assets/images/blog/pexels-photo-261101.jpg", slug: "travel" },
-        { id: 5, title: "Nutrition", thumbnail: "/assets/images/blog/pexels-photo-1153370.webp", slug: "nutrition" },
-        { id: 6, title: "Fitness", thumbnail: "/assets/images/blog/pexels-photo-1089164.webp", slug: "fitness" },
-        { id: 7, title: "Business", thumbnail: "/assets/images/blog/pexels-photo-302083.jpg", slug: "business" },
-        { id: 8, title: "Education", thumbnail: "/assets/images/blog/pexels-photo-261101.jpg", slug: "education" },
-        { id: 9, title: "Entertainment", thumbnail: "/assets/images/blog/pexels-photo-247597.jpg", slug: "entertainment" },
-    ]);
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('category')   // taulun nimi Supabasessa
+        .select('id, title, thumbnail, slug')
+
+      if (error) {
+        console.error('Virhe kategorioiden haussa:', error)
+      } else {
+        setCategories(data || [])
+      }
+      setLoading(false)
+    }
+
+    fetchCategories()
+  }, [])
+
+  if (loading) {
+    return <p>Ladataan kategorioita...</p>
+  }
+
   return (
-    <>
-      <div>
-        <h1 className="text-2xl font-bold">Kategoriat 🌟</h1>
-        <p className="italic font-normal text-xs mt-2 text-gray-500">Viimeisimmät tärkeät uutiset, kuvat, videot ja tärkeät raportit</p>
-        <div className="space-y-4 mt-10">
-          {categories?.slice(0, 7).map((category, index) => (
-            <div className="w-full h-[5rem] relative">
-              <Image width={100} height={100} src={category?.thumbnail} alt=" kategoria otsikko" className="w-full h-[5rem] object-cover absolute rounded-lg" />
-              <div className="w-full h-[5rem] bg-[#0b0011cc] absolute rounded-lg" />
-              <h1 className="text-xl font-semibold absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center">{category.title}</h1>
-            </div>
+    <div>
+      <h1 className="text-2xl font-bold">Kategoriat 🌟</h1>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 justify-between mt-10">
+          {categories?.map((category) => (
+            <Link key={category?.id} href={`/categories/${category?.slug}`} className="block">
+              <div className="w-full h-[5rem] relative cursor-pointer">
+                <Image
+                  width={100}
+                  height={100}
+                  src={category?.thumbnail || defaultArticle}
+                  alt={`Kategoria: ${category?.title}`}
+                  className="w-full h-[5rem] object-cover absolute rounded-lg"
+                />
+                <div className="w-full h-[5rem] bg-[#0b0011cc] absolute rounded-lg" />
+                <h1 className="text-xl font-semibold absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center text-white">
+                  {category?.title}
+                </h1>
+              </div>
+            </Link>
           ))}
         </div>
-      </div>
-    </>
+    </div>
   )
 }
 
 export default Category
+
